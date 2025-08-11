@@ -1,3 +1,26 @@
 [build]
   command = "npm run build"
   publish = "dist"
+
+# Глобальные заголовки для всего сайта
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Жёсткая политика источников (под статику)
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https:; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests"
+
+    # Защита от clickjacking
+    X-Frame-Options = "DENY"
+
+    # Адекватная приватность реферера
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # Ограничаем доступ к чувствительным API браузера
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), bluetooth=(), magnetometer=(), gyroscope=()"
+
+    # CORS/изоляция (безопасные, не ломают статику)
+    Cross-Origin-Resource-Policy = "same-origin"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+    # У тебя уже есть nosniff от Cloudflare, дублировать не вредно
+    X-Content-Type-Options = "nosniff"
