@@ -1,0 +1,19 @@
+{
+  "name": "navalny-memory-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node build-sw.mjs",
+    "preview": "vite preview",
+    "zip-offline": "node scripts/zip-offline.mjs"
+  },
+  "devDependencies": {
+    "vite": "^5.3.0",
+    "workbox-build": "^7.0.0",
+    "adm-zip": "^0.5.10",
+    "axios": "^1.6.0",
+    "form-data": "^4.0.0"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "active": "https://example.org",
+  "mirrors": [
+    "https://example.com",
+    "https://example.info"
+  ]
+}

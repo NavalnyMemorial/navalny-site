@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Актуальные зеркала</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Актуальные зеркала</h1>
+      <p>Если один из доменов недоступен, используйте другой из списка ниже.</p>
+      <ul id="list"></ul>
+      <p><a href="/">Вернуться на главную</a></p>
+    </main>
+    <script>
+      fetch('/mirrors.json')
+        .then(r => r.json())
+        .then(data => {
+          const ul = document.getElementById('list');
+          const all = [data.active, ...(data.mirrors||[])];
+          all.forEach(url => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = url; a.textContent = url;
+            li.appendChild(a);
+            ul.appendChild(li);
+          });
+        })
+        .catch(() => {
+          document.getElementById('list').innerHTML = '<li>Не удалось загрузить список зеркал.</li>';
+        });
+    </script>
+  </body>
+</html>
