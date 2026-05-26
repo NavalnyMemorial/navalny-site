@@ -34,11 +34,19 @@ function render() {
         </div>
       </div>
 
-      <button class="target" id="target-${ch.id}" data-character-id="${ch.id}" aria-label="Dunk ${ch.name}"></button>
+      <button
+        class="target"
+        id="target-${ch.id}"
+        data-character-id="${ch.id}"
+        aria-label="Dunk ${ch.name}">
+      </button>
 
       <div class="seat"></div>
       <div class="mud"></div>
-      <div class="splash" id="splash-${ch.id}">💦 SPLASH!</div>
+
+      <div class="splash" id="splash-${ch.id}">
+        💦 SPLASH!
+      </div>
 
       <h2>${ch.name}</h2>
     `;
@@ -58,33 +66,48 @@ function throwBall(id) {
   if (throwsLeft <= 0) return;
 
   throwsLeft--;
+
   document.getElementById("throwsLeft").innerText = throwsLeft;
 
   const character = characters.find(c => c.id === id);
+
   if (!character) return;
 
   character.dunks++;
 
-  document.getElementById(`count-${id}`).innerText = character.dunks;
-  document.getElementById(`person-${id}`).classList.add("dunked");
-  document.getElementById(`splash-${id}`).classList.add("show");
+  document.getElementById(`count-${id}`).innerText =
+    character.dunks;
+
+  document.getElementById(`person-${id}`)
+    .classList.add("dunked");
+
+  document.getElementById(`splash-${id}`)
+    .classList.add("show");
 
   document.getElementById("message").innerText =
     `${character.name} was dunked into the mud!`;
 
   setTimeout(() => {
-    const person = document.getElementById(`person-${id}`);
-    const splash = document.getElementById(`splash-${id}`);
+    const person =
+      document.getElementById(`person-${id}`);
 
-    if (person) person.classList.remove("dunked");
-    if (splash) splash.classList.remove("show");
+    const splash =
+      document.getElementById(`splash-${id}`);
+
+    if (person) {
+      person.classList.remove("dunked");
+    }
+
+    if (splash) {
+      splash.classList.remove("show");
+    }
   }, 900);
 
   if (throwsLeft === 0) {
     document.getElementById("message").innerText =
       "Game over. You used all 5 throws.";
 
-    document.querySelectorAll(".target").forEach(t => {
+    document.querySelectorAll(".target").forEach((t) => {
       t.classList.add("disabled");
     });
   }
@@ -92,11 +115,14 @@ function throwBall(id) {
 
 function restartGame() {
   throwsLeft = 5;
-  document.getElementById("throwsLeft").innerText = throwsLeft;
+
+  document.getElementById("throwsLeft").innerText =
+    throwsLeft;
+
   document.getElementById("message").innerText =
     "Tap any target to dunk a character.";
 
-  document.querySelectorAll(".target").forEach(t => {
+  document.querySelectorAll(".target").forEach((t) => {
     t.classList.remove("disabled");
   });
 }
@@ -104,8 +130,13 @@ function restartGame() {
 document.addEventListener("DOMContentLoaded", () => {
   render();
 
-  const restartButton = document.getElementById("restartButton");
+  const restartButton =
+    document.getElementById("restartButton");
+
   if (restartButton) {
-    restartButton.addEventListener("click", restartGame);
+    restartButton.addEventListener(
+      "click",
+      restartGame
+    );
   }
 });
