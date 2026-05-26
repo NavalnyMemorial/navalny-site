@@ -8,19 +8,35 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial;
-      background: #dff3ff;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(#dff3ff, #ffd89b);
       overflow-x: auto;
     }
 
-    h1 {
+    .top {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,0.9);
+      padding: 16px;
       text-align: center;
-      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .throws {
+      margin-top: 8px;
+      font-size: 22px;
+      font-weight: bold;
     }
 
     .arena {
       display: flex;
-      gap: 40px;
+      gap: 50px;
       padding: 40px;
       width: max-content;
     }
@@ -28,15 +44,35 @@
     .character {
       width: 260px;
       text-align: center;
+      position: relative;
     }
 
     .counter {
       background: white;
       padding: 10px;
-      border-radius: 12px;
-      font-size: 28px;
+      border-radius: 14px;
+      font-size: 26px;
       font-weight: bold;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .seat-area {
+      height: 260px;
+      position: relative;
+    }
+
+    .person {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: transform 0.6s ease, opacity 0.4s ease;
+      z-index: 2;
+    }
+
+    .person.dunked {
+      transform: translateX(-50%) translateY(170px) rotate(18deg);
+      opacity: 0.65;
     }
 
     .head {
@@ -44,88 +80,236 @@
       height: 120px;
       background: pink;
       border-radius: 50%;
-      margin: auto;
       border: 4px solid black;
       font-size: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin: auto;
+    }
+
+    .body {
+      width: 80px;
+      height: 80px;
+      background: #222;
+      margin: -4px auto 0;
+      border-radius: 20px 20px 8px 8px;
     }
 
     .target {
-      width: 70px;
-      height: 70px;
+      width: 76px;
+      height: 76px;
       background: red;
       border-radius: 50%;
-      margin: 20px auto;
+      margin: 18px auto;
       cursor: pointer;
-      border: 4px solid white;
+      border: 5px solid white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .target::before {
+      content: "";
+      width: 42px;
+      height: 42px;
+      background: white;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .target:hover {
+      transform: scale(1.08);
+    }
+
+    .target.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .seat {
+      width: 150px;
+      height: 12px;
+      background: #8b4a1f;
+      margin: 0 auto;
+      border-radius: 8px;
     }
 
     .mud {
-      width: 220px;
-      height: 100px;
+      width: 230px;
+      height: 110px;
       background: #5c3417;
       margin: auto;
-      border-radius: 40px 40px 0 0;
+      border-radius: 50px 50px 0 0;
+      position: relative;
+      overflow: hidden;
+      border: 4px solid #3a1e0d;
+    }
+
+    .mud::before {
+      content: "";
+      position: absolute;
+      width: 80px;
+      height: 40px;
+      background: #8a552a;
+      border-radius: 50%;
+      top: 25px;
+      left: 25px;
+    }
+
+    .mud::after {
+      content: "";
+      position: absolute;
+      width: 90px;
+      height: 35px;
+      background: #75411e;
+      border-radius: 50%;
+      top: 55px;
+      right: 25px;
+    }
+
+    .splash {
+      font-size: 30px;
+      height: 36px;
+      margin-top: 6px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .splash.show {
+      opacity: 1;
+    }
+
+    button.restart {
+      margin-top: 12px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .donate {
+      margin-top: 10px;
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: #0057b7;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .message {
+      margin-top: 8px;
+      font-weight: bold;
+      color: #7a2e00;
     }
   </style>
 </head>
 
 <body>
 
-<h1>Mud Dunk Gallery</h1>
-
-<div class="arena">
-
-  <div class="character">
-    <div class="counter" id="c1">128</div>
-
-    <div class="head">😵</div>
-
-    <div class="target" onclick="hit('c1')"></div>
-
-    <div class="mud"></div>
-
-    <h2>Crypto King</h2>
-  </div>
-
-  <div class="character">
-    <div class="counter" id="c2">94</div>
-
-    <div class="head">🤡</div>
-
-    <div class="target" onclick="hit('c2')"></div>
-
-    <div class="mud"></div>
-
-    <h2>Fake Guru</h2>
-  </div>
-
-  <div class="character">
-    <div class="counter" id="c3">212</div>
-
-    <div class="head">😬</div>
-
-    <div class="target" onclick="hit('c3')"></div>
-
-    <div class="mud"></div>
-
-    <h2>Drama Mayor</h2>
-  </div>
-
+<div class="top">
+  <h1>Mud Dunk Gallery</h1>
+  <div class="throws">Throws left: <span id="throwsLeft">5</span></div>
+  <div class="message" id="message">Tap any target to dunk a character.</div>
+  <button class="restart" onclick="restartGame()">Restart</button>
+  <br>
+  <a class="donate" href="#" target="_blank">Support Humanitarian Aid 🇺🇦</a>
 </div>
 
+<div class="arena" id="arena"></div>
+
 <script>
-function hit(id) {
-  let counter = document.getElementById(id);
+const characters = [
+  { id: 1, name: "Crypto King", emoji: "😵", dunks: 128 },
+  { id: 2, name: "Fake Guru", emoji: "🤡", dunks: 94 },
+  { id: 3, name: "Drama Mayor", emoji: "😬", dunks: 212 },
+  { id: 4, name: "Greedy Boss", emoji: "🤑", dunks: 77 },
+  { id: 5, name: "Angry Coach", emoji: "😡", dunks: 156 }
+];
 
-  let value = parseInt(counter.innerText);
+let throwsLeft = 5;
 
-  value++;
+function render() {
+  const arena = document.getElementById("arena");
+  arena.innerHTML = "";
 
-  counter.innerText = value;
+  characters.forEach((ch) => {
+    const card = document.createElement("div");
+    card.className = "character";
+
+    card.innerHTML = `
+      <div class="counter">
+        Dunked: <span id="count-${ch.id}">${ch.dunks}</span>
+      </div>
+
+      <div class="seat-area">
+        <div class="person" id="person-${ch.id}">
+          <div class="head">${ch.emoji}</div>
+          <div class="body"></div>
+        </div>
+      </div>
+
+      <div class="target" id="target-${ch.id}" onclick="throwBall(${ch.id})"></div>
+
+      <div class="seat"></div>
+      <div class="mud"></div>
+      <div class="splash" id="splash-${ch.id}">💦 SPLASH!</div>
+
+      <h2>${ch.name}</h2>
+    `;
+
+    arena.appendChild(card);
+  });
 }
+
+function throwBall(id) {
+  if (throwsLeft <= 0) return;
+
+  throwsLeft--;
+  document.getElementById("throwsLeft").innerText = throwsLeft;
+
+  const character = characters.find(c => c.id === id);
+  character.dunks++;
+
+  document.getElementById(`count-${id}`).innerText = character.dunks;
+  document.getElementById(`person-${id}`).classList.add("dunked");
+  document.getElementById(`splash-${id}`).classList.add("show");
+
+  document.getElementById("message").innerText =
+    `${character.name} was dunked into the mud!`;
+
+  setTimeout(() => {
+    document.getElementById(`person-${id}`).classList.remove("dunked");
+    document.getElementById(`splash-${id}`).classList.remove("show");
+  }, 900);
+
+  if (throwsLeft === 0) {
+    document.getElementById("message").innerText =
+      "Game over. You used all 5 throws.";
+    document.querySelectorAll(".target").forEach(t => {
+      t.classList.add("disabled");
+    });
+  }
+}
+
+function restartGame() {
+  throwsLeft = 5;
+  document.getElementById("throwsLeft").innerText = throwsLeft;
+  document.getElementById("message").innerText =
+    "Tap any target to dunk a character.";
+
+  document.querySelectorAll(".target").forEach(t => {
+    t.classList.remove("disabled");
+  });
+}
+
+render();
 </script>
 
 </body>
